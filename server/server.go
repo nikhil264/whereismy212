@@ -6,7 +6,7 @@ import (
 
 	"fmt"
 
-	"github.com/nikhil264/location"
+	"github.com/nikhil264/whereismy212/location"
 )
 
 func onbusHandler(w http.ResponseWriter, r *http.Request) {
