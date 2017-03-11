@@ -20,21 +20,14 @@ var mutex = &sync.Mutex{}
 //GetLoc return last updated bus location
 func GetLoc() map[string]Loc {
 	currLoc := make(map[string]Loc)
-	currLoc["bs0655"] = Loc{12.1, 12.3, 21321, "tapri"}
-	currLoc["bs0625"] = Loc{12.1, 12.3, 21321, "tapri"}
-	currLoc["bs0675"] = Loc{12.1, 12.3, 21321, "tapri"}
-	// for _, v := range currBusses {
-	// 	if v != nil {
-	// 		currLoc[v] = initBusLoc[v]
-	// 	}
-	// }
+	//test locations
+	// currLoc["bs0655"] = Loc{12.1, 12.3, 21321, "tapri"}
+	// currLoc["bs0625"] = Loc{12.1, 12.3, 21321, "tapri"}
+	// currLoc["bs0675"] = Loc{12.1, 12.3, 21321, "tapri"}
+	for _, v := range currBusses {
+		currLoc[v] = busLoc[v][len(busLoc[v])-1]
+	}
 	return currLoc
-}
-
-//GetBusses gives current busses running
-func GetBusses() {
-	// s := make([]string, 3)
-
 }
 
 //UpdateLoc handles the new bus location received
@@ -50,34 +43,67 @@ func UpdateLoc(l Loc) {
 
 //whichBus finds which current running bus location is received
 func whichBus(l Loc) {
+	t := strconv.FormatUint(l.Time, 10)
+	t = t[len(t)-4:]
 	if l.Dest == "bs" {
-		t := strconv.FormatUint(l.Time, 10)
-		t = t[len(t)-4:]
+		//to check if the location is from any running bits to sec busses
 		for _, v := range currBusses {
-			l.Dest = v
+			if l.Dest+t > v {
+				busLoc[v] = append(busLoc[v], l)
+				return
+			}
 		}
-
+		// to start a new bus from bits to sec
+		for k := range busLoc {
+			if l.Dest+t > k {
+				mutex.Lock()
+				currBusses = append(currBusses, k)
+				busLoc[k] = append(busLoc[k], l)
+				mutex.Unlock()
+				return
+			}
+		}
 	}
+	if l.Dest == "sb" {
+		//to check if the location is from any running sec to bits busses
+		for _, v := range currBusses {
+			if v[0:2] == "sb" && l.Dest+t > v {
+				busLoc[v] = append(busLoc[v], l)
+				return
+			}
+		}
+		//to start a new bus from sec to bits
+		for k := range busLoc {
+			if k[0:2] == "sb" && l.Dest+t > k {
+				mutex.Lock()
+				currBusses = append(currBusses, k)
+				busLoc[k] = append(busLoc[k], l)
+				mutex.Unlock()
+				return
+			}
+		}
+	}
+	//if user directly specifies which bus he is in.
 	if _, ok := busLoc[l.Dest]; ok {
 		busLoc[l.Dest] = append(busLoc[l.Dest], l)
+		return
 	}
-	if l.Dest == "BPHC" {
 
-	}
 }
 
 func validLoc(l Loc) bool {
 	return true
 }
 
-func GetCurrBusses() []string {
-	for k, v := range busLoc {
-		if len(v) > 0 {
-			currBusses = append(currBusses, k)
-		}
-	}
-	return currBusses
-}
+//gives the slice of current running busses from either sides
+// func GetCurrBusses() []string {
+// 	for k, v := range busLoc {
+// 		if len(v) > 0 {
+// 			currBusses = append(currBusses, k)
+// 		}
+// 	}
+// 	return currBusses
+// }
 
 func initBusLoc() {
 	busLoc = make(map[string][]Loc)
