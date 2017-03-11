@@ -44,7 +44,7 @@ func UpdateLoc(l Loc) {
 //whichBus finds which current running bus location is received
 func whichBus(l Loc) {
 	t := strconv.FormatUint(l.Time, 10)
-	t = t[len(t)-4:]
+	t = t[len(t)-6 : len(t)-2]
 	if l.Dest == "bs" {
 		//to check if the location is from any running bits to sec busses
 		for _, v := range currBusses {
