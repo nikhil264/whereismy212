@@ -21,12 +21,12 @@ var mutex = &sync.Mutex{}
 func GetLoc() map[string]Loc {
 	currLoc := make(map[string]Loc)
 	//test locations
-	// currLoc["bs0655"] = Loc{12.1, 12.3, 21321, "tapri"}
-	// currLoc["bs0625"] = Loc{12.1, 12.3, 21321, "tapri"}
-	// currLoc["bs0675"] = Loc{12.1, 12.3, 21321, "tapri"}
-	for _, v := range currBusses {
-		currLoc[v] = busLoc[v][len(busLoc[v])-1]
-	}
+	currLoc["bs0655"] = Loc{12.1, 12.3, 21321, "tapri"}
+	currLoc["bs0625"] = Loc{12.1, 12.3, 21321, "tapri"}
+	currLoc["bs0675"] = Loc{12.1, 12.3, 21321, "tapri"}
+	// for _, v := range currBusses {
+	// 	currLoc[v] = busLoc[v][len(busLoc[v])-1]
+	// }
 	return currLoc
 }
 
