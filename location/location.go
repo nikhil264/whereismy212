@@ -95,17 +95,8 @@ func validLoc(l Loc) bool {
 	return true
 }
 
-//gives the slice of current running busses from either sides
-// func GetCurrBusses() []string {
-// 	for k, v := range busLoc {
-// 		if len(v) > 0 {
-// 			currBusses = append(currBusses, k)
-// 		}
-// 	}
-// 	return currBusses
-// }
-
-func initBusLoc() {
+//InitBusLoc intializes the busses
+func InitBusLoc() {
 	busLoc = make(map[string][]Loc)
 
 	busLoc["bs0655"] = []Loc{}
