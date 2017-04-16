@@ -10,19 +10,19 @@ import (
 
 	"bytes"
 
-	"github.com/nikhil264/location"
+	"github.com/nikhil264/whereismy212/location"
 )
 
 func main() {
 	t, _ := strconv.ParseUint(time.Now().Format("20060102150405"), 10, 0)
-	l := location.Loc{Lng: 17.555556, Lat: 78.563919, Time: t, Dest: ""}
+	l := location.Loc{Lng: 17.555556, Lat: 78.563919, Time: t, Dest: "bs"}
 
-	buf, _ := json.Marshal(l)
-	b := bytes.NewBuffer(buf)
+	b := new(bytes.Buffer)
+	json.NewEncoder(b).Encode(l)
 
-	res, _ := http.Post("http://127.0.0.1:9090/onbus", "application/json", b)
+	res, _ := http.Post("http://localhost:9090/onbus", "application/json", b)
 	io.Copy(os.Stdout, res.Body)
-	res, _ = http.Get("http://127.0.0.1:9090/track")
+	res, _ = http.Get("http://localhost:9090/track")
 	io.Copy(os.Stdout, res.Body)
 
 	// s := "20060102151405"
