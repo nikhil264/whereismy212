@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto">
+    <style type="text/css">
+       #map
+       {
+        background: #fff;
+        border-radius: 2px;
+        border: 1px ;
+        border-style: solid;
+        border-color: #bbbbbb;
+        display: block;
+        height: 650px;
+        margin: auto;
+        position: relative;
+        width: 95%;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+        transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+       }
+
+      #map:hover 
+      {
+       box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+      }
+
+      h1
+      {
+        font-family: 'Roboto', sans-serif;
+        font-size: 36px;
+        /*font-size: 55px;*/
+      }
+
+      p,h2
+      {
+        font-family: 'Roboto', sans-serif;
+        font-size: 30px;
+        font-weight: 200;
+       /* display: block;
+        margin: auto;*/
+      }
+
+
+
+      /*MAKE BUTTONS RESPONSIVE*/
+      .button 
+      {
+      background-color: #5d5757; /* Green */
+      border: none;
+      color: white;
+      padding: 12px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 43px;
+      margin: 10px 5px 30px 5px ;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+      transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+      border-radius: 2px;
+      } 
+
+      .button:hover 
+      {
+       box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+      }
+
+
+
+
+    @media screen and (min-width: 1090px){
+    .button {
+	      
+	      font-size: 24px;
+	      margin:30px 50px;
+	    }
+  	}
+
+
+    </style>
+  </head>
+  <body>
+    <h1>Testing 212 Bus Tracking</h1>
+    
+    <p> 
+    From Secunderabad Railway Station (Gurudwara Point) to BITS Main gate:<br>
+    07:50, 08:20, 08:50, 09:50, 11:00, 12:00, 13:00, 14:10, 15:05, 16:05, 17:20, 18:15, 19:15, 20:15, 21:15.<br><br>
+    From BITS Main Gate to Secunderabad Railway Station:<br>
+    06:55 , 07:55 , 08:50, 09:20, 09:50, 11:00, 12:00, 13:00, 14:00, 15:05, 16:05, 17:20, 18:15, 19:15, 20:15.<br>
+    </p>
+
+    <h2 id = "locid"></h2>
+    
+    <button class="button" onclick="track()">Track 212</button>
+
+    <button class="button" onclick="getLocation()">Send location</button>
+
+    <button class="button" onclick="clearInterval(send)">Stop Sending</button>
+
+
+
+
+    <script type="text/javascript">
+    	function track()
+    	{
+    		var x = document.getElementById("locid");
+    		x.innerHTML = "Will be available after a while. Thanks for your interest";
+    	}
+    </script>
+    
+    <!-- script to get location and display element with id locid -->
+    <script>
+	function executeAndSetInterval(fn,t)
+	{
+		fn();
+    	return(setInterval(fn, t));
+	}
+
+    var x = document.getElementById("locid");
+    var count=0;
+    function getLocation()
+    {
+      send = executeAndSetInterval(function () {
+	      count++;
+	      if (navigator.geolocation) 
+	      {
+	          navigator.geolocation.getCurrentPosition(showPosition);
+	      } 
+	      else 
+	      { 
+	          x.innerHTML = "Geolocation is not supported by this browser.";
+	      }
+      },60000)
+    }
+
+    function showPosition(position) 
+    {
+    x.innerHTML = count + "Latitude: " + position.coords.latitude + "<br> Longitude: " + position.coords.longitude;
+    }
+
+    </script>
+    
+
+    <div id="map"></div>
+    <script>
+		function initMap() 
+		{
+			var loc = {lat: 17.547638, lng: 78.572255};   //17.547638, 78.572255
+			var map = new google.maps.Map(document.getElementById('map'), 
+			{
+			  zoom: 13,
+			  center: loc
+			});
+			var marker = new google.maps.Marker(
+			{
+			  position: loc,
+			  map: map
+			  // tilt: 0
+			  // noClear: false
+			});
+		}
+    </script>
+    
+    <script async defer
+    	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-MFEC_W_kWZpReTZ4poVx1Ih67X_8hKs&callback=initMap">
+    </script>
+
+
+
+  <div style='text-align: right;position: fixed;z-index:9999999;bottom: 0; width: 100%;cursor: pointer;line-height: 0;'><a title="Hosted on free web hosting 000webhost.com. Host your own website for FREE." target="_blank" href="https://www.000webhost.com/?utm_source=000webhostapp&utm_campaign=000_logo&utm_medium=website_brinish-trees&utm_content=footer_img"><img src="https://cloud.githubusercontent.com/assets/23024110/20663010/9968df22-b55e-11e6-941d-edbc894c2b78.png"  alt="www.000webhost.com"></a></div></body>
+</html>

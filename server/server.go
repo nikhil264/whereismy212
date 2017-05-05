@@ -49,9 +49,13 @@ func trackHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, v)
 	}
 }
+func frontHandler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "./whereismy212.html")
+}
 func main() {
 	location.InitBusLoc()
 	http.HandleFunc("/track", trackHandler)
 	http.HandleFunc("/onbus", onbusHandler)
+	http.HandleFunc("/", frontHandler)
 	http.ListenAndServe(":9090", nil)
 }
